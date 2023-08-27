@@ -80,52 +80,70 @@ const data=[
 
 
 const Menu=()=>{
-    let [items,setItems] = useState(data);
+  const [menu,setMenu]=useState([]);
 
-    function filterItems(e){
-        console.log(e)
-        if(e == "all"){
-            setItems(data);
-            return;
-        }
-        const filteredData = data.filter((item)=>{
-            return item.category === e
-        })
-        setItems(filteredData);
-    }
+
+
+  const handleClick =(e)=>{
+     if(e.target.innerText === 'All')
+     {
+        setMenu(data);
+     }
+     else if(e.target.innerText === 'Breakfast')
+     {
+        setMenu(data.filter((item) => (item.category === 'breakfast')))
+     }
+     else if(e.target.innerText === 'Lunch')
+     {
+        setMenu(data.filter((item) => (item.category === 'Lunch')))
+     }
+     else if(e.target.innerText === 'Shakes')
+     {
+        setMenu(data.filter((item) => (item.category === 'Shakes')))
+     }
+  }
+
+
     return (
-    <div>
-        <h1 className='heading'>Our Menu</h1>
-        <ul type='none'>
-            <li onClick={(e)=>filterItems("all")} value="all">All</li>
-            <li onClick={(e)=>filterItems("breakfast")}>Breakfast</li>
-            <li onClick={(e)=>filterItems("lunch")}>Lunch</li>
-            <li onClick={(e)=>filterItems("shakes")} >Shakes</li>
-        </ul>
-        <div className='container'>
+        <div id="main">
+            <h1>Our Menu</h1>
+            <p onClick={handleClick}>All</p>
+            <p id="filter-btn-1" onClick={handleClick}>Breakfast</p>
+            <p id="filter-btn-2" onClick={handleClick}>Lunch</p>
+            <p id="filter-btn-3" onClick={handleClick}>Shakes</p>
+
+
+
             {
-                items.map((item,index)=>(
-                    <div key={index} className='item'>
-                        <div className='left'>
-                            <img src="" alt='image' />
+                menu.map(item =>(
+                    item.category=="shakes"?
+                    <div data-test-id="menu-item-shakes">
+                        <img src={item.img} alt={item.title}></img>
+                        <h2><span>{item.title}</span><span>{item.price}</span></h2>
+                        <p>{item.desc}</p>
+                    </div>:
+                    item.category == 'lunch' ?
+                    <div data-test-id="menu-item-lunch">
+                        <img src={item.img} alt={item.title}></img>
+                        <h2><span>{item.title}</span> <span>{item.price}</span></h2>
+                        <p>{item.desc}</p>
+                    </div> :
+                    item.category == 'breakfast' ?
+                        <div data-test-id="menu-item-breakfast">
+                            <img src={item.img} alt={item.title}></img>
+                            <h2><span>{item.title}</span> <span>{item.price}</span></h2>
+                            <p>{item.desc}</p>
+                        </div> :
+                        <div>
+                            <img src={item.img} alt={item.title}></img>
+                            <h2><span>{item.title}</span> <span>{item.price}</span></h2>
+                            <p>{item.desc}</p>
                         </div>
-                        <div className='right'>
-                            <div className='top'>
-                                <b>{item.title}</b>
-                                <p>$ {item.price}</p>
-                            </div>
-                            <div className="bottom">
-                                <p className='desc'>{item.desc}</p>
-                            </div>
-                        </div>
-                    </div>
                 ))
             }
-        
         </div>
 
-    </div>
-  )
+    )
 }
 
 export default Menu;
